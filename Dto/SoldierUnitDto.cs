@@ -11,8 +11,6 @@ namespace MilitaryServices.App.Dto
         public string Active { get; set; }
         public Unit Unit { get; set; }
 
-        public SoldierUnitDto() { }
-
         public SoldierUnitDto(int id, string name, string surname, string situation, string active, Unit unit)
         {
             Id = id;

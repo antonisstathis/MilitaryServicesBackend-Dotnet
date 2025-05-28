@@ -10,8 +10,6 @@ namespace MilitaryServices.App.Dto
         public string Situation { get; set; }
         public int NumberOfServices { get; set; }
 
-        public SoldierServiceStatDto() { }
-
         public SoldierServiceStatDto(string soldierRegNumber, string company, string name, string surname, string active, string situation, int numberOfServices)
         {
             SoldierRegNumber = soldierRegNumber;

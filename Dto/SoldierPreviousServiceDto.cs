@@ -14,8 +14,6 @@ namespace MilitaryServices.App.Dto
         public string Armed { get; set; }
         public string Discharged { get; set; }
 
-        public SoldierPreviousServiceDto() { }
-
         public SoldierPreviousServiceDto(
             string token,
             string soldierRegistrationNumber,

@@ -8,8 +8,6 @@ namespace MilitaryServices.App.Dto
         private string _description;
         private string _shift;
 
-        public ServiceOfUnitDto() { }
-
         public ServiceOfUnitDto(long? id, string service, string armed, string description, string shift)
         {
             _id = id;

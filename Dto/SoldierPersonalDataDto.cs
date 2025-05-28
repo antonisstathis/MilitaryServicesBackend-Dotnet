@@ -18,8 +18,6 @@ namespace MilitaryServices.App.Dto
         private string _city;
         private string _address;
 
-        public SoldierPersonalDataDto() { }
-
         public SoldierPersonalDataDto(string token, string soldierRegistrationNumber, string company, string name,
             string surname, string situation, string active, string discharged,
             string patronymic, string matronymic, string mobilePhone, string city, string address)

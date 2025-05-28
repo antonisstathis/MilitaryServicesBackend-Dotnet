@@ -8,8 +8,6 @@ namespace MilitaryServices.App.Dto
         private string _situation;
         private string _active;
 
-        public SoldDto() { }
-
         public SoldDto(int id, string name, string surname, string situation, string active)
         {
             _id = id;
