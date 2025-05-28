@@ -1,0 +1,6 @@
+@MilitaryServicesBackend_Dotnet_HostAddress = http://localhost:5118
+
+GET {{MilitaryServicesBackend_Dotnet_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
