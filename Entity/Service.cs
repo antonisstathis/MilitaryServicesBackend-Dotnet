@@ -50,7 +50,7 @@ namespace MilitaryServices.App.Entity
             Armed = armed;
             Date = date;
             Unit = unit;
-            UnitId = unit?.Id;
+            UnitId = unit?.UnitId;
         }
 
         public Service(string serviceName, string armed, DateTime date, Unit unit, string company, string description, string shift)
@@ -59,7 +59,7 @@ namespace MilitaryServices.App.Entity
             Armed = armed;
             Date = date;
             Unit = unit;
-            UnitId = unit?.Id;
+            UnitId = unit?.UnitId;
             Company = company;
             Description = description;
             Shift = shift;

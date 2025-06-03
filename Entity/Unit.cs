@@ -10,7 +10,7 @@ namespace MilitaryServices.App.Entity
         [Key]
         [Column("unit_id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+        public long UnitId { get; set; }
 
         [Column("name_of_unit")]
         public string NameOfUnit { get; set; }
@@ -22,7 +22,7 @@ namespace MilitaryServices.App.Entity
 
         public Unit()
         {
-            ServicesOfUnit = new List<ServiceOfUnit>();
+            ServicesOfUnit = [];
         }
 
         public List<ServiceOfUnit> GetServicesOfUnit()

@@ -12,7 +12,7 @@ namespace MilitaryServices.App.Entity
         [Key]
         [Column("sold_id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int SoldierId { get; set; }
 
         [Column("soldierRegistrationNumber")]
         public string SoldierRegistrationNumber { get; set; }
@@ -60,18 +60,18 @@ namespace MilitaryServices.App.Entity
 
         public virtual Unit Unit { get; set; }
 
-        public virtual List<Service> Services { get; set; } = new();
+        public virtual Service Service { get; set; }
 
         public Soldier() { }
 
         public Soldier(int id)
         {
-            Id = id;
+            SoldierId = id;
         }
 
         public Soldier(int id, string name, string surname, string situation, string active, bool discharged)
         {
-            Id = id;
+            SoldierId = id;
             Name = name;
             Surname = surname;
             Situation = situation;
@@ -81,7 +81,7 @@ namespace MilitaryServices.App.Entity
 
         public Soldier(int id, string company, string soldierRegistrationNumber, string name, string surname, string situation, string active, bool discharged)
         {
-            Id = id;
+            SoldierId = id;
             Company = company;
             SoldierRegistrationNumber = soldierRegistrationNumber;
             Name = name;
@@ -91,15 +91,15 @@ namespace MilitaryServices.App.Entity
             Discharged = discharged;
         }
 
-        public Soldier(int id, string soldierRegistrationNumber, string name, string surname, string situation, string active, List<Service> services, bool discharged, string company, string patronymic, string matronymic, string mobilePhone, string city, string address, Unit unit)
+        public Soldier(int id, string soldierRegistrationNumber, string name, string surname, string situation, string active, Service service, bool discharged, string company, string patronymic, string matronymic, string mobilePhone, string city, string address, Unit unit)
         {
-            Id = id;
+            SoldierId = id;
             SoldierRegistrationNumber = soldierRegistrationNumber;
             Name = name;
             Surname = surname;
             Situation = situation;
             Active = active;
-            Services = services ?? new List<Service>();
+            Service = service;
             Discharged = discharged;
             Company = company;
             Patronymic = patronymic;
@@ -108,7 +108,7 @@ namespace MilitaryServices.App.Entity
             City = city;
             Address = address;
             Unit = unit;
-            UnitId = (int?)unit?.Id;
+            UnitId = (int?)unit?.UnitId;
         }
 
         [NotMapped]
@@ -118,20 +118,19 @@ namespace MilitaryServices.App.Entity
         public bool IsArmed => string.Equals(Situation, Enums.Situation.ARMED.ToString(), StringComparison.OrdinalIgnoreCase);
 
         [NotMapped]
-        public bool IsOut => Services.Count > 0 && string.Equals(Services[0].ServiceName, "out", StringComparison.OrdinalIgnoreCase);
+        public bool IsOut => string.Equals(Service.ServiceName, "out", StringComparison.OrdinalIgnoreCase);
 
         [NotMapped]
-        public bool IsAvailable => Services.Count > 0 && string.Equals(Services[0].ServiceName, "available", StringComparison.OrdinalIgnoreCase);
+        public bool IsAvailable => string.Equals(Service.ServiceName, "available", StringComparison.OrdinalIgnoreCase);
 
         public void SetService(Service service)
         {
-            Services.Clear();
-            Services.Add(service);
+            Service = service;
         }
 
         public Service GetService()
         {
-            return Services.Count > 0 ? Services[0] : null;
+            return Service;
         }
 
         public void Print()

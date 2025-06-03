@@ -21,6 +21,11 @@ namespace MilitaryServices.App.Dto
         public string Description { get; set; }
         public string Shift { get; set; }
 
+        public SoldierServiceDto()
+        {
+            
+        }
+
         public SoldierServiceDto(
             int id,
             string company,
