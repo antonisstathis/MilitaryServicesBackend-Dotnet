@@ -25,7 +25,7 @@ namespace MilitaryServices.App.Entity
         public Authority(User user, string authority)
         {
             User = user;
-            Username = user.Username; // Assumes User has a Username property
+            Username = user.Username;
             AuthorityName = authority;
         }
     }

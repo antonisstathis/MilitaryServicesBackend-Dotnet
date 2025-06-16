@@ -42,7 +42,7 @@ namespace MilitaryServices.App.Entity
             Description = description;
             Shift = shift;
             Unit = unit;
-            UnitId = unit?.Id;
+            UnitId = unit?.UnitId;
         }
 
         [NotMapped]

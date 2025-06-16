@@ -25,7 +25,7 @@ namespace MilitaryServices.App.Entity
 
         public User()
         {
-            Authorities = new List<Authority>();
+            Authorities = [];
         }
 
         public User(string username, string password, bool enabled)
