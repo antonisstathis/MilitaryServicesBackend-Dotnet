@@ -12,7 +12,7 @@ namespace MilitaryServices.App
         public DbSet<ServiceOfUnit> ServiceOfUnits { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<Soldier> Soldiers { get; set; }
-        public DbSet<Service> Services { get; set; }
+        public DbSet<MilitaryServices.App.Entity.Service> Services { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,12 +28,12 @@ namespace MilitaryServices.App
                 .WithMany(u => u.ServicesOfUnit)
                 .HasForeignKey(s => s.UnitId);
 
-            modelBuilder.Entity<Service>()
+            modelBuilder.Entity<MilitaryServices.App.Entity.Service>()
                 .HasOne(s => s.Soldier)
                 .WithOne(soldier => soldier.Service)
-                .HasForeignKey<Service>(s => s.SoldierId);
+                .HasForeignKey<MilitaryServices.App.Entity.Service>(s => s.SoldierId);
 
-            modelBuilder.Entity<Service>()
+            modelBuilder.Entity<MilitaryServices.App.Entity.Service>()
                 .HasOne(s => s.Unit)
                 .WithMany()
                 .HasForeignKey(s => s.UnitId);
@@ -45,7 +45,7 @@ namespace MilitaryServices.App
 
             modelBuilder.Entity<ServiceOfUnit>().ToTable("ser_of_unit", "ms");
             modelBuilder.Entity<Unit>().ToTable("unit", "ms");
-            modelBuilder.Entity<Service>().ToTable("service", "ms");
+            modelBuilder.Entity<MilitaryServices.App.Entity.Service>().ToTable("service", "ms");
             modelBuilder.Entity<Soldier>().ToTable("soldier", "ms");
             modelBuilder.Entity<User>().ToTable("users", "ms");
             modelBuilder.Entity<Authority>().ToTable("authorities", "ms");

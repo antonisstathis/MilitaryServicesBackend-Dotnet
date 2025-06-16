@@ -1,42 +1,36 @@
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MilitaryServices.App.Entity;
 
 namespace MilitaryServices.App.Dao
 {
-    public class UserRepository
+    public class UserRepository(MilitaryDbContext context) : IUserRepository
     {
-        private readonly MilitaryDbContext _context;
+        private readonly MilitaryDbContext _context = context;
 
-        public UserRepository(MilitaryDbContext context)
+        public User? FindById(string id)
         {
-            _context = context;
+            return _context.Users.Find(id);
         }
 
-        public async Task<User?> FindByIdAsync(string id)
-        {
-            return await _context.Users.FindAsync(id);
-        }
-
-        public async Task AddUserAsync(User user)
+        public void AddUser(User user)
         {
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteUserAsync(string id)
+        public void DeleteUser(string id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = _context.Users.Find(id);
             if (user != null)
             {
                 _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public List<User> GetAll()
         {
-            return await _context.Users.ToListAsync();
+            return [.. _context.Users];
         }
     }
 }

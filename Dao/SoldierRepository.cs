@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using MilitaryServices.App.Dto;
 using MilitaryServices.App.Entity;
 
 namespace MilitaryServices.App.Dao
 {
-    public class SoldierRepository
+    public class SoldierRepository : ISoldierRepository
     {
         private readonly MilitaryDbContext _context;
 
@@ -17,12 +17,12 @@ namespace MilitaryServices.App.Dao
             _context = context;
         }
 
-        public async Task SaveSoldierAsync(Soldier soldier, DateTime currentDate)
+        public void SaveSoldier(Soldier soldier, DateTime currentDate)
         {
             _context.Soldiers.Add(soldier);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            var service = new Service
+            var service = new MilitaryServices.App.Entity.Service
             {
                 ServiceName = "out",
                 Armed = string.Empty,
@@ -31,10 +31,10 @@ namespace MilitaryServices.App.Dao
             };
 
             _context.Services.Add(service);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task SaveSoldiersAsync(IEnumerable<Soldier> soldiers)
+        public void SaveSoldiers(IEnumerable<Soldier> soldiers)
         {
             foreach (var soldier in soldiers)
             {
@@ -43,10 +43,10 @@ namespace MilitaryServices.App.Dao
                 service.Unit = soldier.Unit;
                 _context.Services.Add(service);
             }
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task<List<Soldier>> LoadSoldAsync(Unit unit, DateTime dateOfLastCalc)
+        public List<Soldier> LoadSold(Unit unit, DateTime dateOfLastCalc)
         {
             var query = from s in _context.Soldiers
                         join u in _context.Services on s equals u.Soldier
@@ -54,10 +54,10 @@ namespace MilitaryServices.App.Dao
                             && !s.Discharged
                             && u.Date.HasValue
                             && u.Date.Value.Date == dateOfLastCalc.Date
-                        orderby s.Id
+                        orderby s.SoldierId
                         select new SoldierServiceDto
                         {
-                            Id = s.Id,
+                            Id = s.SoldierId,
                             Company = s.Company,
                             SoldierRegistrationNumber = s.SoldierRegistrationNumber,
                             Name = s.Name,
@@ -74,13 +74,13 @@ namespace MilitaryServices.App.Dao
                             Shift = u.Shift
                         };
 
-            var list = await query.ToListAsync();
+            var list = query.ToList();
 
-            return list.Select(dto =>
+            return [.. list.Select(dto =>
             {
                 var sold = new Soldier
                 {
-                    Id = dto.Id,
+                    SoldierId = dto.Id,
                     Company = dto.Company,
                     SoldierRegistrationNumber = dto.SoldierRegistrationNumber,
                     Name = dto.Name,
@@ -90,7 +90,7 @@ namespace MilitaryServices.App.Dao
                     Discharged = dto.Discharged
                 };
 
-                var service = new Service
+                var service = new MilitaryServices.App.Entity.Service
                 {
                     ServiceName = dto.Service,
                     Armed = dto.Armed,
@@ -104,40 +104,40 @@ namespace MilitaryServices.App.Dao
                 sold.Service = service;
                 sold.Unit = service.Unit;
                 return sold;
-            }).ToList();
+            })];
         }
 
         public DateTime GetDateOfCalculation(Unit unit, int calculations)
         {
-            var dateOfFirstCalculation = GetDateOfFirstCalculation(unit).Result;
+            var dateOfFirstCalculation = GetDateOfFirstCalculation(unit);
             return dateOfFirstCalculation.AddDays(calculations - 1);
         }
 
-        public async Task<DateTime> GetDateOfFirstCalculation(Unit unit)
+        public DateTime GetDateOfFirstCalculation(Unit unit)
         {
-            return await _context.Services
+            return _context.Services
                 .Where(s => s.Unit == unit && s.Date.HasValue)
-                .MinAsync(s => s.Date.Value);
+                .Min(s => s.Date.Value);
         }
 
-        public async Task<DateTime> GetDateOfLastCalculation(Unit unit)
+        public DateTime GetDateOfLastCalculation(Unit unit)
         {
-            return await _context.Services
+            return _context.Services
                 .Where(s => s.Unit == unit && s.Date.HasValue)
-                .MaxAsync(s => s.Date.Value);
+                .Max(s => s.Date.Value);
         }
 
-        public async Task<List<SoldierServiceDto>> FindCalculationByDateAsync(Unit unit, DateTime date)
+        public List<SoldierServiceDto> FindCalculationByDate(Unit unit, DateTime date)
         {
             var query = from s in _context.Soldiers
                         join u in _context.Services on s equals u.Soldier
                         where s.Unit == unit
                             && u.Date.HasValue
                             && u.Date.Value.Date == date.Date
-                        orderby s.Id
+                        orderby s.SoldierId
                         select new SoldierServiceDto
                         {
-                            Id = s.Id,
+                            Id = s.SoldierId,
                             Company = s.Company,
                             SoldierRegistrationNumber = s.SoldierRegistrationNumber,
                             Name = s.Name,
@@ -152,73 +152,69 @@ namespace MilitaryServices.App.Dao
                             Discharged = s.Discharged
                         };
 
-            return await query.ToListAsync();
+            return [.. query];
         }
 
-        public async Task UpdateSoldierAsync(Soldier soldier)
+        public void UpdateSoldier(Soldier soldier)
         {
             _context.Soldiers.Update(soldier);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task<List<HistoricalData>> GetHistoricalDataDescAsync(Unit unit, string armed)
+        public List<HistoricalData> GetHistoricalDataDesc(Unit unit, string armed)
         {
             var query = from s in _context.Soldiers
                         join u in _context.Services on s equals u.Soldier
                         where s.Unit == unit && !s.Discharged && u.Armed == armed
-                        group s by s.Id into g
+                        group s by s.SoldierId into g
                         orderby g.Count() descending
                         select new HistoricalData(g.Key, g.Count());
 
-            return await query.ToListAsync();
+            return [.. query];
         }
 
-        public async Task<List<HistoricalData>> GetHistoricalDataAscAsync(Unit unit, string armed)
+        public List<HistoricalData> GetHistoricalDataAsc(Unit unit, string armed)
         {
             var query = from s in _context.Soldiers
                         join u in _context.Services on s equals u.Soldier
                         where s.Unit == unit && !s.Discharged && u.Armed == armed
-                        group s by s.Id into g
+                        group s by s.SoldierId into g
                         orderby g.Count() ascending
                         select new HistoricalData(g.Key, g.Count());
 
-            return await query.ToListAsync();
+            return [.. query];
+        }
+        
+        public List<SoldierServiceStatDto> GetSoldierServiceStatisticalData(Expression<Func<Soldier, bool>> soldierPredicate, Func<MilitaryServices.App.Entity.Service, bool> servicePredicate)
+        {
+            var query = from soldier in _context.Soldiers.Where(soldierPredicate)
+                        join service in _context.Services.Where(servicePredicate)
+                            on soldier.SoldierId equals service.SoldierId
+                        group soldier by soldier.SoldierRegistrationNumber into g
+                        orderby g.Count() descending
+                        select new SoldierServiceStatDto
+                        {
+                            SoldierRegNumber = g.Key,
+                            Company = g.Select(s => s.Company).FirstOrDefault()!,
+                            Name = g.Select(s => s.Name).FirstOrDefault()!,
+                            Surname = g.Select(s => s.Surname).FirstOrDefault()!,
+                            Active = g.Select(s => s.Active).FirstOrDefault()!,
+                            Situation = g.Select(s => s.Situation).FirstOrDefault()!,
+                            NumberOfServices = g.Count()
+                        };
+
+            return [.. query];
         }
 
-        public async Task<List<SoldierServiceStatDto>> GetSoldierServiceStatisticalDataAsync(IQueryable<Soldier> soldiersQuery)
+        public Soldier FindSoldierById(int soldierId)
         {
-            var query = soldiersQuery
-                .GroupJoin(_context.Services,
-                    soldier => soldier.Id,
-                    service => service.Soldier.Id,
-                    (soldier, services) => new
-                    {
-                        Soldier = soldier,
-                        ServiceCount = services.LongCount()
-                    })
-                .OrderByDescending(x => x.ServiceCount)
-                .Select(x => new SoldierServiceStatDto(
-                    x.Soldier.SoldierRegistrationNumber,
-                    x.Soldier.Company,
-                    x.Soldier.Name,
-                    x.Soldier.Surname,
-                    x.Soldier.Active,
-                    x.Soldier.Situation,
-                    (int)x.ServiceCount
-                ));
-
-            return await query.ToListAsync();
+            return _context.Soldiers.Find(soldierId);
         }
 
-        public async Task<Soldier> FindSoldierByIdAsync(int soldierId)
+        public List<Soldier> FindAll(Soldier soldier)
         {
-            return await _context.Soldiers.FindAsync(soldierId);
-        }
-
-        public async Task<List<Soldier>> FindAllAsync(Soldier soldier)
-        {
-            var dateOfLastCalculation = await GetDateOfLastCalculation(soldier.Unit);
-            return await LoadSoldAsync(soldier.Unit, dateOfLastCalculation);
+            var dateOfLastCalculation = GetDateOfLastCalculation(soldier.Unit);
+            return LoadSold(soldier.Unit, dateOfLastCalculation);
         }
 
         private DateTime ConvertStringToDate(string date)
@@ -229,28 +225,25 @@ namespace MilitaryServices.App.Dao
             throw new FormatException($"Invalid date format: {date}");
         }
 
-        public async Task<List<Soldier>> FindByUnitAndDischargedAsync(Unit unit, bool discharged)
+        public List<Soldier> FindByUnitAndDischarged(Unit unit, bool discharged)
         {
-            return await _context.Soldiers
+            return [.. _context.Soldiers
                 .Where(s => s.Unit == unit && s.Discharged == discharged)
-                .OrderBy(s => s.Id)
-                .ToListAsync();
+                .OrderBy(s => s.SoldierId)];
         }
 
-        public async Task<List<Soldier>> FindBySoldierRegistrationNumberContainingIgnoreCaseAsync(string registrationFragment)
+        public List<Soldier> FindBySoldierRegistrationNumberContainingIgnoreCase(string registrationFragment)
         {
-            return await _context.Soldiers
-                .Where(s => EF.Functions.Like(s.SoldierRegistrationNumber.ToLower(), $"%{registrationFragment.ToLower()}%"))
-                .ToListAsync();
+            return [.. _context.Soldiers.Where(s => EF.Functions.Like(s.SoldierRegistrationNumber.ToLower(), $"%{registrationFragment.ToLower()}%"))];
         }
 
-        public async Task UpdateDischargedStatusByIdAsync(int id, bool discharged)
+        public void UpdateDischargedStatusById(int id, bool discharged)
         {
-            var soldier = await _context.Soldiers.FindAsync(id);
+            var soldier = _context.Soldiers.Find(id);
             if (soldier != null)
             {
                 soldier.Discharged = discharged;
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
     }

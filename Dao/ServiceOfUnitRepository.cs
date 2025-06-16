@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MilitaryServices.App.Entity;
 
 namespace MilitaryServices.App.Dao
 {
-    public class ServiceOfUnitRepository
+    public class ServiceOfUnitRepository : IServiceOfUnitRepository
     {
         private readonly MilitaryDbContext _context;
 
@@ -15,25 +14,45 @@ namespace MilitaryServices.App.Dao
             _context = context;
         }
 
-        public async Task<List<ServiceOfUnit>> FindByUnitAsync(Unit unit)
+        public List<ServiceOfUnit> FindByUnit(Unit unit)
         {
-            return await _context.ServiceOfUnits
-                .Where(s => s.Unit == unit)
-                .ToListAsync();
+            return [.. _context.ServiceOfUnits.Where(s => s.Unit == unit)];
         }
 
-        public async Task<int> CountServicesOfUnitAsync(Unit unit)
+        public int CountServicesOfUnit(Unit unit)
         {
-            return await _context.ServiceOfUnits
+            return _context.ServiceOfUnits
                 .Where(s => s.Unit == unit)
-                .CountAsync();
+                .Count();
         }
 
-        public async Task<List<ServiceOfUnit>> FindByUnitAndArmedAsync(Unit unit, string armed)
+        public List<ServiceOfUnit> FindByUnitAndArmed(Unit unit, string armed)
         {
-            return await _context.ServiceOfUnits
-                .Where(s => s.Unit == unit && s.Armed == armed)
-                .ToListAsync();
+            return [.. _context.ServiceOfUnits.Where(s => s.Unit == unit && s.Armed == armed)];
+        }
+
+        public void DeleteAllById(List<long> ids)
+        {
+            var servicesToDelete = _context.Services
+            .Where(s => ids.Contains(s.Id))
+            .ToList();
+
+            if (servicesToDelete.Count > 0)
+            {
+                _context.Services.RemoveRange(servicesToDelete);
+                _context.SaveChanges();
+            }
+        }
+
+         public ServiceOfUnit Save(ServiceOfUnit service)
+        {
+            if (service.Id == 0)
+                _context.ServiceOfUnits.Add(service);
+            else
+                _context.ServiceOfUnits.Update(service);
+
+            _context.SaveChanges();
+            return service;
         }
     }
 }

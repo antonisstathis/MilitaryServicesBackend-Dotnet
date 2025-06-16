@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MilitaryServices.App.Entity;
 
@@ -16,25 +15,19 @@ namespace MilitaryServices.App.Dao
             _context = context;
         }
 
-        public async Task<List<Service>> FindByUnitAndDateAndArmedAsync(Unit unit, DateTime date, string armed)
+        public List<MilitaryServices.App.Entity.Service> FindByUnitAndDateAndArmed(Unit unit, DateTime date, string armed)
         {
-            return await _context.Services
-                .Where(s => s.Unit == unit && s.Date.HasValue && s.Date.Value.Date == date.Date && s.Armed == armed)
-                .ToListAsync();
+            return [.. _context.Services.Where(s => s.Unit == unit && s.Date.HasValue && s.Date.Value.Date == date.Date && s.Armed == armed)];
         }
 
-        public async Task<List<Service>> FindByUnitAndDateAsync(Unit unit, DateTime date)
+        public List<MilitaryServices.App.Entity.Service> FindByUnitAndDate(Unit unit, DateTime date)
         {
-            return await _context.Services
-                .Where(s => s.Unit == unit && s.Date.HasValue && s.Date.Value.Date == date.Date)
-                .ToListAsync();
+            return [.. _context.Services.Where(s => s.Unit == unit && s.Date.HasValue && s.Date.Value.Date == date.Date)];
         }
 
-        public async Task<List<Service>> FindBySoldierAsync(Soldier soldier)
+        public List<MilitaryServices.App.Entity.Service> FindBySoldier(Soldier soldier)
         {
-            return await _context.Services
-                .Where(s => s.Soldier == soldier)
-                .ToListAsync();
+            return [.. _context.Services.Where(s => s.Soldier == soldier)];
         }
     }
 }

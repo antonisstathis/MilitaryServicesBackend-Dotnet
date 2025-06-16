@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 
-public class MessageService
+public class MessageService : IMessageService
 {
     private readonly IStringLocalizer _localizer;
 

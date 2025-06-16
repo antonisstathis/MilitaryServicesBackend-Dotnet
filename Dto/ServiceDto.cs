@@ -11,6 +11,8 @@ namespace MilitaryServices.App.Dto
         private string _description;
         private string _shift;
 
+        public ServiceDto() {} 
+
         public ServiceDto(long id, string service, DateTime serviceDate, string armed, string description, string shift)
         {
             _id = id;

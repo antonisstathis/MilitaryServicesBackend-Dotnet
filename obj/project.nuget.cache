@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "esMR1Dz4Nbg=",
+  "dgSpecHash": "WuLxn42sewY=",
   "success": true,
   "projectFilePath": "/Users/antonis/Desktop/MilitaryServicesBackend-Dotnet/MilitaryServicesBackend-Dotnet.csproj",
   "expectedPackageFiles": [
+    "/Users/antonis/.nuget/packages/anglesharp/0.17.1/anglesharp.0.17.1.nupkg.sha512",
+    "/Users/antonis/.nuget/packages/anglesharp.css/0.17.0/anglesharp.css.0.17.0.nupkg.sha512",
     "/Users/antonis/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/Users/antonis/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",
+    "/Users/antonis/.nuget/packages/htmlsanitizer/9.0.884/htmlsanitizer.9.0.884.nupkg.sha512",
     "/Users/antonis/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/9.0.5/microsoft.aspnetcore.authentication.jwtbearer.9.0.5.nupkg.sha512",
     "/Users/antonis/.nuget/packages/microsoft.aspnetcore.openapi/9.0.1/microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
     "/Users/antonis/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.1/microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
@@ -36,6 +39,7 @@
     "/Users/antonis/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
     "/Users/antonis/.nuget/packages/microsoft.sqlserver.server/1.0.0/microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "/Users/antonis/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "/Users/antonis/.nuget/packages/system.buffers/4.5.1/system.buffers.4.5.1.nupkg.sha512",
     "/Users/antonis/.nuget/packages/system.clientmodel/1.0.0/system.clientmodel.1.0.0.nupkg.sha512",
     "/Users/antonis/.nuget/packages/system.configuration.configurationmanager/6.0.1/system.configuration.configurationmanager.6.0.1.nupkg.sha512",
     "/Users/antonis/.nuget/packages/system.diagnostics.diagnosticsource/6.0.1/system.diagnostics.diagnosticsource.6.0.1.nupkg.sha512",

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MilitaryServices.App.Entity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +14,9 @@ namespace MilitaryServices.App.Dao
             _context = context;
         }
 
-        public async Task<List<Authority>> FindByUserAsync(User user)
+        public List<Authority> FindByUser(User user)
         {
-            return await _context.Authorities
-                .Where(a => a.Username== user.Username)
-                .ToListAsync();
+            return [.. _context.Authorities.Where(a => a.Username== user.Username)];
         }
     }
 }

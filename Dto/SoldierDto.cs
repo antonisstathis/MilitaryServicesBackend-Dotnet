@@ -15,6 +15,8 @@ namespace MilitaryServices.App.Dto
         private DateTime _date;
         private string _armed;
 
+        public SoldierDto() {}
+
         public SoldierDto(string name, string surname, string situation, string active)
         {
             _name = name;
@@ -84,6 +86,11 @@ namespace MilitaryServices.App.Dto
             get => _date.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
         }
 
+        public void SetDate(DateTime date)
+{
+            _date = date;
+        }
+
         // Returns raw DateTime
         public DateTime ExtractDate()
         {
@@ -96,9 +103,5 @@ namespace MilitaryServices.App.Dto
             set => _armed = value;
         }
 
-        public void SetDate(DateTime date)
-        {
-            _date = date;
-        }
     }
 }
