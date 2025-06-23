@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MilitaryServices.App.Dto;
 using MilitaryServices.App.Services;
@@ -48,7 +47,7 @@ namespace MilitaryServices.App.Controllers
 
         public class JwtResponse
         {
-            public string Token { get; set; }
+            public required string Token { get; set; }
         }
     }
 }
