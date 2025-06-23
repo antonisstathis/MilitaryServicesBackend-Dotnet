@@ -5,16 +5,11 @@ using MilitaryServices.App.Entity;
 
 namespace MilitaryServices.App.Services
 {
-    public class AuthorityService : IAuthorityService
+    public class AuthorityService(IAuthorityRepository authorityRepository) : IAuthorityService
     {
-        private readonly IAuthorityRepository _authorityRepository;
+        private readonly IAuthorityRepository _authorityRepository = authorityRepository;
 
-        public AuthorityService(IAuthorityRepository authorityRepository)
-        {
-            _authorityRepository = authorityRepository;
-        }
-
-        public List<string> FindRolesByUsernameAsync(User user)
+        public List<string> FindRolesByUsername(User user)
         {
             var authorities = _authorityRepository.FindByUser(user);
             return [.. authorities.Select(auth => $"ROLE_{auth.AuthorityName.ToUpper()}")];

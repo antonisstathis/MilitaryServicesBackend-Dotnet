@@ -40,7 +40,7 @@ namespace MilitaryServices.App.Controllers
             if (result != PasswordVerificationResult.Success)
                 return Unauthorized("Invalid password");
 
-            var roles = _authorityService.FindRolesByUsernameAsync(user);
+            var roles = _authorityService.FindRolesByUsername(user);
             var token = _jwtUtil.GenerateToken(loginRequest.Username, roles);
 
             return Ok(new JwtResponse { Token = token });

@@ -15,7 +15,6 @@ using MilitaryServices.App.Entity;
 using MilitaryServices.App.Enums;
 using MilitaryServices.App.Security;
 using MilitaryServicesApp.Service;
-using MilitaryServicesBackendDotnet.Security;
 using MilitaryServices.App.Extensions;
 using MilitaryServices.App.Test;
 

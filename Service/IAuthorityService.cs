@@ -5,6 +5,6 @@ namespace MilitaryServices.App.Services
 {
     public interface IAuthorityService
     {
-        List<string> FindRolesByUsernameAsync(User user);
+        List<string> FindRolesByUsername(User user);
     }
 }
