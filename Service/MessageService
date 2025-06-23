@@ -1,32 +1,35 @@
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 
-public class MessageService : IMessageService
+namespace MilitaryServices.App.Services
 {
-    private readonly IStringLocalizer _localizer;
-
-    public MessageService(IStringLocalizerFactory factory)
+    public class MessageService : IMessageService
     {
-        var type = typeof(MessageService);
-        _localizer = factory.Create("Messages", type.Assembly.GetName().Name);
-    }
+        private readonly IStringLocalizer _localizer;
 
-    public string GetMessage(string code, CultureInfo culture)
-    {
-        var originalCulture = CultureInfo.CurrentCulture;
-        var originalUICulture = CultureInfo.CurrentUICulture;
-
-        try
+        public MessageService(IStringLocalizerFactory factory)
         {
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
-
-            return _localizer[code];
+            var type = typeof(MessageService);
+            _localizer = factory.Create("Messages", type.Assembly.GetName().Name);
         }
-        finally
+
+        public string GetMessage(string code, CultureInfo culture)
         {
-            CultureInfo.CurrentCulture = originalCulture;
-            CultureInfo.CurrentUICulture = originalUICulture;
+            var originalCulture = CultureInfo.CurrentCulture;
+            var originalUICulture = CultureInfo.CurrentUICulture;
+
+            try
+            {
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+
+                return _localizer[code];
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = originalCulture;
+                CultureInfo.CurrentUICulture = originalUICulture;
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace MilitaryServices.App.Entity
             Username = username;
             Password = password;
             Enabled = enabled;
-            Authorities = new List<Authority>();
+            Authorities = [];
         }
 
         public void SetUserId(string username)

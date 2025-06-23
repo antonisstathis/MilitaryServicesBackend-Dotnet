@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace MilitaryServicesBackendDotnet.Security
+namespace MilitaryServices.App.Security
 {
     public interface IJwtUtil
     {

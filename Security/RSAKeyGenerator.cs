@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace MilitaryServicesBackendDotnet.Security
+namespace MilitaryServices.App.Security
 {
     public static class RSAKeyGenerator
     {

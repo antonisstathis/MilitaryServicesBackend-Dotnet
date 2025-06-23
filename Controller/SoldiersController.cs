@@ -7,7 +7,6 @@ using MilitaryServices.App.Security;
 using MilitaryServices.App.Service;
 using MilitaryServices.App.Services;
 using MilitaryServicesApp.Service;
-using MilitaryServicesBackendDotnet.Security;
 using System.Globalization;
 using System.Security.Claims;
 using System.Text.Json;

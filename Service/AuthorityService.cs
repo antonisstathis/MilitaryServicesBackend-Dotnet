@@ -5,7 +5,7 @@ using MilitaryServices.App.Entity;
 
 namespace MilitaryServices.App.Services
 {
-    public class AuthorityService
+    public class AuthorityService : IAuthorityService
     {
         private readonly IAuthorityRepository _authorityRepository;
 
