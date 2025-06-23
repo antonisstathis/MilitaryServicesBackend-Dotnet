@@ -29,23 +29,16 @@ namespace MilitaryServices.App.Middleware
             {
                 var username = jwtUtil.ExtractUsername(context.Request);
                 var user = userService.FindUser(username);
-
-                if (user != null)
+                var token = jwtUtil.ExtractToken(context.Request);
+                var roles = jwtUtil.ExtractRoles(token);
+                var claims = new List<Claim>
                 {
-                    var token = jwtUtil.ExtractToken(context.Request);
-                    var roles = jwtUtil.ExtractRoles(token);
-
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, username)
-                    };
-                    claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-
-                    var identity = new ClaimsIdentity(claims, "jwt");
-                    var principal = new ClaimsPrincipal(identity);
-
-                    context.User = principal;
-                }
+                    new(ClaimTypes.Name, username)
+                };
+                claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+                var identity = new ClaimsIdentity(claims, "jwt");
+                var principal = new ClaimsPrincipal(identity);
+                context.User = principal;
 
                 _next(context);
             }
